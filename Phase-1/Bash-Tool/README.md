@@ -1,117 +1,378 @@
-# Linux Security Audit Tool (Bash)
+# 🛡️ Linux Security Audit Tool
 
-## Tool Name
-**Linux Security Audit Tool** — `tool.sh`
+### Bash-Based Linux Security Auditing & System Monitoring
 
-## Objective
-Provide a quick, **read-only local security overview** of a Linux system. Useful when a SOC analyst or system administrator wants to review basic exposure and system posture before doing a more detailed investigation.
+**Project:** Phase 1 — Bash Automation Tool  
+**Internship:** IqraSec Academy — Scripting & Automation  
+**Developer:** Abdul Moiz  
+**Language:** Bash  
+**Platform:** Kali Linux / Ubuntu  
+**Status:** Completed
 
-## Features
-- Interactive menu with numbered options.
-- Display hostname, operating system, kernel, user, uptime, and global IP addresses.
-- List local **listening TCP and UDP ports** with `ss` (or `netstat` fallback).
-- Inspect UFW and firewalld status when present; show the first 40 lines of nftables rules when running as root.
-- Show up to 25 currently running systemd services (process-list fallback).
-- Display up to 25 available APT package updates using **cached package metadata**.
-- Run all checks together and automatically save a timestamped `.txt` report in `reports/`.
-- Support individual checks from the command line for simple automation.
-- Does **not** change firewall settings, update packages, or stop services.
+---
 
-## Requirements
-- A Linux system such as **Ubuntu 22.04+ or Kali Linux**.
-- Bash 4+ and standard utilities (`date`, `hostname`, `uname`, `id`, `sed`, `grep`, `cut`, `tee`).
-- Recommended: `iproute2` (`ss`, `ip`) and `procps` (`ps`).
-- Optional: `ufw`, `firewalld`, `nftables`, `systemd` and `apt`, depending on the Linux distribution.
-- Normal user permissions are sufficient for many checks. Root permissions may be needed to view firewall rules.
+## 📌 1. Project Overview
 
-No third-party Bash package or external API is required. Some checks may show an informational message when their Linux utility is unavailable.
+The **Linux Security Audit Tool** is a Bash-based command-line application designed to provide a quick, read-only overview of a Linux system's security configuration and operational status.
 
-## How to Run
+The tool features an interactive menu-driven interface that allows users to inspect system information, listening network ports, firewall configurations, running services, and available package updates.
 
-Open a Linux terminal in the `Bash-Tool/` directory:
+It also provides a full audit option that executes the available checks and automatically saves the results in a timestamped text report.
+
+This project was developed as part of **Phase 1 of the IqraSec Academy Scripting & Automation Internship**.
+
+## 🎯 2. Project Objectives
+
+- Develop an interactive security auditing tool using Bash.
+- Automate repetitive Linux system inspection tasks.
+- Identify locally listening TCP and UDP ports.
+- Inspect firewall status and configuration visibility.
+- Review currently running system services.
+- Check available package updates.
+- Generate timestamped security audit reports.
+- Improve Bash scripting, Linux administration, and troubleshooting skills.
+
+## ⚙️ 3. Features
+
+| Feature | Description |
+|---|---|
+| Interactive CLI | Menu-driven interface with numbered options |
+| System Information | Displays hostname, OS, kernel, user, uptime, and IP addresses |
+| Network Inspection | Lists listening TCP and UDP ports |
+| Firewall Inspection | Checks UFW, firewalld, and available nftables rules |
+| Service Monitoring | Displays running systemd services or process information |
+| Update Inspection | Checks available APT updates using cached metadata |
+| Full Audit | Executes all checks and saves a report |
+| Automation Support | Supports direct command-line arguments |
+| Read-Only Operation | Does not modify firewall rules, packages, or services |
+
+## 🖥️ 4. Interactive Command-Line Interface
+
+The tool provides an interactive terminal interface that makes security checks accessible without requiring users to remember individual commands.
+
+When executed, the application displays:
+
+```text
+========================================
+       LINUX SECURITY AUDIT TOOL
+========================================
+
+[1] System information
+[2] Open ports
+[3] Firewall status
+[4] Running services
+[5] Available updates
+[6] Full audit + save report
+[0] Exit
+
+Choose an option:
+```
+
+### Menu Options Explained
+
+| Option | Operation | Purpose |
+|---|---|---|
+| 1 | System Information | Retrieve basic Linux system information |
+| 2 | Open Ports | Display listening TCP and UDP sockets |
+| 3 | Firewall Status | Inspect firewall utilities and available rules |
+| 4 | Running Services | Identify active system services |
+| 5 | Available Updates | Display available package updates |
+| 6 | Full Audit | Execute all checks and save a report |
+| 0 | Exit | Terminate the program |
+
+The user enters the corresponding number and presses **Enter** to execute the selected operation.
+
+### 📸 Main Menu Screenshot
+
+![Linux Security Audit Tool](screenshots/01-main-menu.png)
+
+*Figure 1: Linux Security Audit Tool interactive interface running on Kali Linux.*
+
+## 🛠️ 5. Technical Requirements
+
+**Supported environments:**
+- Kali Linux
+- Ubuntu 22.04 or newer
+- Other compatible Linux distributions, depending on available utilities
+
+**Required components:**
+- Bash 4+
+- Standard Linux command-line utilities
+- `date`, `hostname`, `uname`, `id`, `sed`, `grep`, `cut`, and `tee`
+
+**Recommended components:**
+- `iproute2` for `ss` and `ip`
+- `procps` for process inspection
+
+**Optional components:**
+- `ufw`
+- `firewalld`
+- `nftables`
+- `systemd`
+- `apt`
+- `netstat`
+
+Some functionality depends on the Linux distribution and installed utilities.
+
+Administrative privileges may be necessary to inspect certain firewall rules.
+
+## 🚀 6. Installation & Execution
+
+### Step 1 — Open the Terminal
+
+Navigate to the directory containing the Bash script.
+
+```bash
+cd Bash-Tool
+```
+
+### Step 2 — Make the Script Executable
 
 ```bash
 chmod +x tool.sh
+```
+
+### Step 3 — Launch the Application
+
+```bash
 ./tool.sh
 ```
 
-Choose menu option **6** to run the complete audit and save a report.
+The interactive security auditing menu will appear.
 
-You can also run without using the menu:
+### Step 4 — Select an Operation
+
+For example, enter:
+
+```text
+Choose an option: 2
+```
+
+The tool will execute the listening-port inspection.
+
+To perform a complete audit:
+
+```text
+Choose an option: 6
+```
+
+To exit:
+
+```text
+Choose an option: 0
+[i] Goodbye!
+```
+
+## 💻 7. Direct Command-Line Execution
+
+In addition to its interactive interface, the application supports individual checks through command-line arguments.
 
 ```bash
-./tool.sh --all
-./tool.sh --ports
-./tool.sh --firewall
-./tool.sh --services
-./tool.sh --updates
+# Display system information
 ./tool.sh --system
+
+# Inspect listening network ports
+./tool.sh --ports
+
+# Inspect firewall status
+./tool.sh --firewall
+
+# Display running services
+./tool.sh --services
+
+# Check available updates
+./tool.sh --updates
+
+# Execute complete audit
+./tool.sh --all
+
+# Display help information
 ./tool.sh --help
 ```
 
-To inspect firewall rules with elevated permissions:
+For additional firewall inspection privileges:
 
 ```bash
 sudo ./tool.sh --all
 ```
 
-To choose a different report directory:
+To save reports in a custom directory:
 
 ```bash
 SEC_AUDIT_REPORT_DIR="$HOME/audit-reports" ./tool.sh --all
 ```
 
-> **Note:** The report may contain hostnames, IP addresses, and service details. Keep reports private and redact sensitive information in public screenshots and repositories.
+## 🔍 8. Security Audit Modules
 
-## Example Usage
+### 8.1 System Information
 
-```bash
-./tool.sh --ports
+Retrieves basic information about the local Linux system.
+
+Information includes:
+- Hostname
+- Operating system
+- Kernel version
+- Current user
+- System uptime
+- Global IP addresses
+
+### 8.2 Listening Network Ports
+
+Identifies TCP and UDP sockets listening on the local system.
+
+The tool uses `ss` when available and can fall back to `netstat`.
+
+This information helps administrators identify exposed local services and investigate unexpected listeners.
+
+**Note:** A listening port does not necessarily indicate that the service is accessible from the internet.
+
+### 8.3 Firewall Inspection
+
+Checks the availability and status of supported firewall utilities.
+
+Depending on the environment and privileges, it may inspect:
+- UFW
+- firewalld
+- nftables rules
+
+### 8.4 Running Services
+
+Displays up to 25 running systemd services.
+
+If systemd information is unavailable, the tool can use a process-list fallback.
+
+### 8.5 Available Updates
+
+Checks up to 25 available APT package updates using locally cached package metadata.
+
+The tool does not automatically refresh package metadata or install updates.
+
+### 8.6 Full Security Audit
+
+Combines all available inspection modules into one execution.
+
+The results are displayed in the terminal and saved to a timestamped text file.
+
+## 📄 9. Automated Report Generation
+
+The full audit functionality automatically generates a report inside the `reports/` directory by default.
+
+Example report filename:
+
+```text
+audit-YYYYMMDD-HHMMSS-PID.txt
 ```
 
-To generate a full report:
+The timestamp and process ID help distinguish reports generated during separate executions.
 
-```bash
-./tool.sh --all
+Example report location:
+
+```text
+Bash-Tool/reports/audit-YYYYMMDD-HHMMSS-PID.txt
 ```
 
-## Example Output
+Reports can contain system identifiers, network addresses, and service information. Review and redact reports before sharing them publicly.
 
-**Illustrative output** — the actual values depend on your Linux machine:
+## 📊 10. Example Output
+
+The following is an illustrative example of the open-port inspection. Actual results vary by system.
 
 ```text
 ------------------------------------------------------------
 2. LISTENING NETWORK PORTS (TCP / UDP)
 ------------------------------------------------------------
+
 Netid State  Recv-Q Send-Q Local Address:Port  Peer Address:Port
 tcp   LISTEN 0      128    0.0.0.0:22          0.0.0.0:*
-[i] Listening ports are not necessarily reachable through the firewall.
 
-[+] Report saved: /home/user/Phase-1/Bash-Tool/reports/audit-YYYYMMDD-HHMMSS-PID.txt
+[i] Listening ports are not necessarily
+    reachable through the firewall.
 ```
 
-The report filename includes the date/time and a process ID to reduce accidental collisions.
+### Program Exit — Verified Screenshot
 
-## Challenges Faced
-- **Linux tools differ across distributions.** The script checks whether utilities exist and provides a useful message when a check cannot run.
-- **Firewall visibility depends on privileges.** Detailed nftables rule inspection is performed only when running as root; the report clearly identifies limited access.
-- **Package information can be stale.** The updates check uses locally cached APT metadata and does not pretend to perform a fresh internet check.
-- **Systemd is not always available.** The script uses a basic process-list fallback when it cannot retrieve running systemd services.
+```text
+Choose an option: 0
+[i] Goodbye!
+```
 
-## Future Improvements
-- Export structured JSON/CSV results.
-- Analyze risky open ports using user-defined rules.
-- Support other package managers such as DNF and Pacman.
-- Provide configurable audit policies and severity labels.
-- Add automated test coverage across more Linux distributions.
+The provided screenshot demonstrates that the interactive menu opens and the exit option terminates the application.
 
-## Screenshots to Capture
-After testing on **your own Linux lab**, save real screenshots in `screenshots/`, for example:
+## 📸 11. Project Screenshots
 
-1. `01-main-menu.png` — menu shown after `./tool.sh`.
-2. `02-open-ports.png` — option 2 or `./tool.sh --ports`.
-3. `03-firewall-status.png` — option 3 or `./tool.sh --firewall`.
-4. `04-complete-audit.png` — audit completion and saved report location.
+The following evidence files document the application's functionality.
 
-## Limitations & Safety
-This is a **basic local configuration overview**, not a penetration test, full vulnerability scanner, or proof that a host is secure. A listening port does not imply internet accessibility. The script never modifies the target system's security settings. Run it only on systems you own or are authorized to administer.
+| Screenshot | Description |
+|---|---|
+| `01-main-menu.png` | Interactive CLI and exit operation |
+| `02-open-ports.png` | Listening TCP/UDP port inspection |
+| `03-firewall-status.png` | Firewall status inspection |
+| `04-complete-audit.png` | Full audit and generated report |
+
+Screenshots should be captured from actual executions in the Linux lab environment.
+
+## 🧩 12. Challenges Faced
+
+### Different Linux Utilities
+
+Linux distributions do not always include the same administrative tools.
+
+**Approach:** Check utility availability and provide informative messages or supported fallback commands.
+
+### Firewall Permissions
+
+Detailed firewall inspection may require administrative privileges.
+
+**Approach:** Restrict privileged inspection where appropriate and indicate limited visibility.
+
+### Package Metadata Limitations
+
+Cached APT package information may not reflect the latest available updates.
+
+**Approach:** Clearly describe the limitation rather than presenting cached results as a fresh update check.
+
+### Systemd Compatibility
+
+Not every Linux environment provides accessible systemd service information.
+
+**Approach:** Use a process-list fallback when necessary.
+
+## 🚀 13. Future Improvements
+
+- Add JSON and CSV report export.
+- Introduce configurable security audit policies.
+- Identify potentially risky listening ports.
+- Add severity classifications for audit findings.
+- Support additional package managers.
+- Introduce automated tests.
+- Improve report formatting and summarization.
+
+## 🔐 14. Limitations & Security Considerations
+
+This application provides a basic local security configuration overview.
+
+It is not a complete vulnerability scanner, penetration testing framework, or substitute for professional security assessment.
+
+The tool:
+- Does not modify firewall configurations.
+- Does not install or remove software.
+- Does not terminate services.
+- Does not guarantee that a system is secure.
+- Should only be executed on owned or authorized systems.
+
+## 👨‍💻 15. Developer Information
+
+**Abdul Moiz**  
+Scripting & Automation Intern — IqraSec Academy  
+Cybersecurity | SOC Operations | Linux | Bash Automation
+
+**GitHub:** [cyberabdulmoiz](https://github.com/cyberabdulmoiz)
+
+---
+
+**Project:** Linux Security Audit Tool  
+**Internship Phase:** Phase 1  
+**Language:** Bash  
+**Development Status:** Completed
+
+*Developed as an educational scripting and automation project during the IqraSec Academy internship.*
